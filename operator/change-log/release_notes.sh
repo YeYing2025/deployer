@@ -66,6 +66,24 @@ warn() {
 ' "$*" >&2
 }
 
+notify_release_notes_feishu() {
+  local content_file="$2"
+  local message
+
+  [[ -f "$content_file" ]] || {
+    echo "cannot find Change Summary Notes：$content_file" >&2
+    return 1
+  }
+
+  if ! declare -F send_feishu_message >/dev/null 2>&1; then
+    echo "cannot find send_feishu_message function" >&2
+    return 1
+  fi
+
+  message="$(cat "$content_file")"
+  send_feishu_message "release_notes" "$message"
+}
+
 trim() {
   local v="$1"
   v="${v#"${v%%[![:space:]]*}"}"

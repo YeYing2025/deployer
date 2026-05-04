@@ -36,17 +36,3 @@ send_feishu_message() {
 
   python3 "$feishu_reminder_script" "$scene" "$message"
 }
-
-notify_release_notes_feishu() {
-  local module_name="$1"
-  local content_file="$2"
-  local message
-
-  [[ -f "$content_file" ]] || {
-    echo "cannot find Change Summary Notes：$content_file" >&2
-    return 1
-  }
-
-  message="$(printf 'Module：%s\n\n%s\n' "$module_name" "$(cat "$content_file")")"
-  send_feishu_message "release_notes" "$message"
-}
